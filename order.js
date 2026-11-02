@@ -10,23 +10,16 @@ function getTotal(prices){
     for (let i = 0; i < prices.length; i++){
         if (prices[i] > 0){
             total += prices[i];
-        }else{
-            continue;
         }
     }
-    return(total)
-}
+    return(total);
+    
+};
 
 
 //See if the price of one item is greater than limit
 
-let isExpensive = (price, limit = 500) => {
-    if(price > limit){
-        return(true);
-    }else{
-        return(false);
-    }
-}
+const isExpensive = (price, limit = 500) => price > limit;
 
 
 //Get The Number of Prices hwo is biger then 0 from list
@@ -38,8 +31,6 @@ function getOrderCount(prices){
     for (let i = 0; i < prices.length; i++){
         if (prices[i] > 0){
             x += 1
-        }else{
-            continue
         }
     }
 
@@ -49,25 +40,13 @@ function getOrderCount(prices){
 
 //Get The Average of Prices
 
-function getAveragePrice(prices){
-    
-    let total = 0;
-    let count = 0;
+function getAveragePrice(prices) {
 
-    for (let i = 0; i < prices.length; i++){
-        if (prices[i] > 0){
-            total += prices[i];
-            count += 1;
-        }else{
-            continue;
-        }
-    };
+    const count = getOrderCount(prices);
 
-    if (count === 0){
-        return 0;
-    }
+    if (count === 0) return 0;
 
-    return total / count;
+    return getTotal(prices) / count;
 }
 
 
@@ -75,13 +54,13 @@ function getAveragePrice(prices){
 
 function getMaxPrice(prices){
 
-    let max = 0;
+    if (prices.length === 0) return 0;
+    
+    let max = prices[0];
 
-    for (let i = 0; i < prices.length; i++){
+    for (let i = 1; i < prices.length; i++){
         if (prices[i] > max){
             max = prices[i];
-        }else{
-            continue;
         }
     }
     return max;
@@ -95,11 +74,8 @@ function countExpensiveOrders(prices, limit = 500){
 
     for (let i = 0; i < prices.length; i++){
 
-        if (isExpensive(prices[i], limit) === true){
-            count += 1;
-        }else{
-            continue;
-
+        if (isExpensive(prices[i], limit)) {
+            count++;
         };
 
     };
@@ -111,12 +87,19 @@ function countExpensiveOrders(prices, limit = 500){
 
 //function for summarize Orders
 
-function summarizeOrder(prices, limit = 500){
-    return `The Numbers of Prices is ${getOrderCount(prices)}, and the Average is ${getAveragePrice(prices)},and the max Price id this ${getMaxPrice(prices)},and the expensive Prices is ${countExpensiveOrders(prices, limit)}.`
- 
+function summarizeOrder(prices, limit = 500) {
+    return `The Number of Orders is ${getOrderCount(prices)}, the Average is ${getAveragePrice(prices)}, the Max Price is ${getMaxPrice(prices)}, and the Expensive Orders count is ${countExpensiveOrders(prices, limit)}.`;
 }
 
 
 
 //Tests
+// Test 1: مصفوفة فارغة
+console.log(summarizeOrder([])); 
+// النتيجة المتوقعة: Numbers: 0 | Average: 0 | Max: 0 | Expensive: 0
+
+// Test 2: مصفوفة تحتوي على أصفار وأرقام سالبة فقط
+console.log(summarizeOrder([-10, 0, -50])); 
+// النتيجة المتوقعة: Numbers: 0 | Average: 0 | Max: -10 | Expensive: 0
+
 console.log(summarizeOrder([100, 200, 5000, 600]));
